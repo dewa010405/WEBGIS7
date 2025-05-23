@@ -16,17 +16,18 @@
       display: flex;
       height: 100vh;
       overflow: hidden;
+      flex-direction: row;
     }
 
     .sidebar {
-      width: 280px; /* Diperlebar dari 220px */
+      width: 280px;
       background-color: #007BFF;
       display: flex;
       flex-direction: column;
       transition: all 0.3s ease;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      position: relative;
       padding-top: 10px;
+      z-index: 1001;
     }
 
     .sidebar.hidden {
@@ -186,6 +187,51 @@
     .anggota-list i {
       margin-right: 10px;
       color: #2980B9;
+    }
+
+    /* Responsive Mobile Layout */
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        height: auto;
+        padding: 10px;
+      }
+
+      .sidebar button {
+        font-size: 14px;
+        padding: 10px 12px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .main-content {
+        height: calc(100vh - 60px);
+      }
+
+      .search-container {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .button-group {
+        justify-content: center;
+      }
+
+      .menu-toggle {
+        top: 10px;
+        left: 10px;
+      }
+
+      .tab-content {
+        padding: 10px;
+      }
     }
   </style>
 </head>
