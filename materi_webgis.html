@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi WebGIS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #materiWebGIS {
+      max-width: 1000px; /* Diperbesar dari 960px */
+      margin: 40px;
+      background: #fff;
+      padding: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 2.4em;
+      margin-bottom: 10px;
+      color: #007BFF;
+      text-align: center;
+    }
+
+    h4 {
+      color: #444;
+      margin-top: 30px;
+      font-size: 1.5em;
+      border-left: 5px solid #007BFF;
+      padding-left: 10px;
+    }
+
+    h5 {
+      margin-top: 20px;
+      font-weight: 600;
+      color: #007BFF;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 1em;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    ul li {
+      margin: 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      overflow-x: auto;
+      display: block;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #007BFF;
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #eef6ff;
+    }
+
+    @media screen and (max-width: 768px) {
+      #materiWebGIS {
+        padding: 20px;
+      }
+
+      h3 {
+        font-size: 1.6em;
+      }
+
+      h4 {
+        font-size: 1.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="materiWebGIS">
+    <h3>Materi Lengkap Seputar WebGIS</h3>
+    <h4>1. Pengertian WebGIS</h4>
+    <p>WebGIS (Web Geographic Information System) adalah sistem informasi geografis yang berjalan melalui web browser dan memungkinkan pengguna mengakses dan menganalisis data spasial dari mana saja.</p>
+
+    <h4>Perbedaan GIS dan WebGIS</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Aspek</th>
+          <th>GIS (Desktop)</th>
+          <th>WebGIS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Akses</td>
+          <td>Melalui aplikasi desktop</td>
+          <td>Melalui browser web</td>
+        </tr>
+        <tr>
+          <td>Instalasi</td>
+          <td>Harus instal software khusus</td>
+          <td>Tidak perlu instal software</td>
+        </tr>
+        <tr>
+          <td>Distribusi</td>
+          <td>Terbatas pada pengguna tertentu</td>
+          <td>Dapat diakses publik atau terbatas</td>
+        </tr>
+        <tr>
+          <td>Interaksi</td>
+          <td>Lebih kompleks dan kaya fitur</td>
+          <td>Lebih mudah dan interaktif</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>2. Komponen Utama WebGIS</h4>
+    <ul>
+      <li><strong>Data Spasial:</strong> Data berbasis lokasi seperti peta jalan, sungai, dan batas wilayah.</li>
+      <li><strong>Data Atribut:</strong> Informasi tambahan seperti nama lokasi, kepadatan penduduk, dll.</li>
+      <li><strong>Server GIS:</strong> Tempat pengolahan dan penyimpanan data spasial.</li>
+      <li><strong>Client:</strong> Browser atau aplikasi yang digunakan pengguna untuk mengakses WebGIS.</li>
+      <li><strong>Jaringan:</strong> Media komunikasi yang menghubungkan client dan server, seperti internet.</li>
+    </ul>
+
+    <h4>3. Arsitektur WebGIS</h4>
+    <p>WebGIS biasanya menggunakan arsitektur client-server yang terdiri dari:</p>
+
+    <h5>3.1. Client (User Interface)</h5>
+    <p>Browser atau aplikasi yang menampilkan peta. Contoh: Google Maps, Leaflet.</p>
+
+    <h5>3.2. Web Server</h5>
+    <p>Menangani permintaan data dan komunikasi antara client dan GIS server.</p>
+
+    <h5>3.3. GIS Server</h5>
+    <p>Menyediakan layanan pemetaan dan analisis spasial. Contoh: GeoServer, ArcGIS Server.</p>
+
+    <h5>3.4. Database Spasial</h5>
+    <p>Menyimpan data spasial dan atribut. Contoh: PostGIS, Oracle Spatial.</p>
+
+    <h4>4. Jenis Layanan WebGIS</h4>
+    <h5>4.1. WMS (Web Map Service)</h5>
+    <p>Menyediakan peta dalam bentuk gambar raster.</p>
+
+    <h5>4.2. WFS (Web Feature Service)</h5>
+    <p>Menyediakan data spasial vektor yang dapat dianalisis atau diubah oleh client.</p>
+
+    <h5>4.3. WCS (Web Coverage Service)</h5>
+    <p>Menyediakan data raster seperti citra satelit.</p>
+  </div>
+</body>
+</html>
