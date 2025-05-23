@@ -10,13 +10,14 @@
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html { height: 100%; font-family: Arial, sans-serif; }
+    html, body { height: 100%; font-family: Arial, sans-serif; overflow-x: auto; }
 
     .container {
       display: flex;
       height: 100vh;
       overflow: hidden;
       flex-direction: row;
+      min-width: 1000px; /* supaya layout tetap seperti desktop */
     }
 
     .sidebar {
@@ -74,6 +75,7 @@
     .main-content {
       flex-grow: 1;
       position: relative;
+      min-width: 720px;
     }
 
     .menu-toggle {
@@ -187,51 +189,6 @@
     .anggota-list i {
       margin-right: 10px;
       color: #2980B9;
-    }
-
-    /* Responsive Mobile Layout */
-    @media screen and (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        height: auto;
-        padding: 10px;
-      }
-
-      .sidebar button {
-        font-size: 14px;
-        padding: 10px 12px;
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .main-content {
-        height: calc(100vh - 60px);
-      }
-
-      .search-container {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .button-group {
-        justify-content: center;
-      }
-
-      .menu-toggle {
-        top: 10px;
-        left: 10px;
-      }
-
-      .tab-content {
-        padding: 10px;
-      }
     }
   </style>
 </head>
