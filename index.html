@@ -3,371 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WebGIS Rumah Makan di Kefamenanu</title>
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
+  <title>Timor Travel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: Arial, sans-serif; overflow-x: auto; }
-
-    .container {
-      display: flex;
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .hero {
+      position: relative;
+      width: 100%;
       height: 100vh;
       overflow: hidden;
-      flex-direction: row;
-      min-width: 1000px; /* supaya layout tetap seperti desktop */
     }
-
-    .sidebar {
-      width: 280px;
-      background-color: #007BFF;
+    .hero img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: blur(4px);
+      z-index: 1;
+    }
+    .hero .text-overlay {
+      position: relative;
+      z-index: 2;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s ease;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      padding-top: 10px;
-      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 0 1rem;
+      padding-bottom: 10vh;
     }
-
-    .sidebar.hidden {
-      width: 0;
+    .logo-style {
+      font-family: 'Great Vibes', cursive;
+      font-size: 4rem;
+      color: white;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      border-right: 2px solid white;
+      white-space: nowrap;
       overflow: hidden;
+      width: 1;
+      animation: typing 2s steps(20, end) forwards, blink 0.75s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 17ch } }
+    @keyframes blink { 50% { border-color: transparent; } }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 2s ease-out forwards;
     }
 
-    .menu-title {
-      color: #ffffff;
-      font-size: 28px;
-      font-weight: bold;
-      text-align: center;
-      padding: 20px 0;
-      background-color: #007BFF;
-      border-bottom: 1px solid #E0E0E0;
-    }
-
-    .sidebar button {
-      margin: 20px 0 15px 0;
-      padding: 14px 20px;
-      border: none;
-      background: none;
-      color: #ffffff;
-      font-size: 18px;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: background 0.3s;
+    /* Styling tombol */
+    .btn-masuk {
+      padding: 0.75rem 2rem;
+      font-size: 1.2rem;
       font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease-in-out;
     }
-
-    .sidebar button i {
-      font-size: 20px;
-    }
-
-    .sidebar button:hover,
-    .sidebar button.active {
-      background-color: #0056b3;
-      font-weight: bold;
-    }
-
-    .main-content {
-      flex-grow: 1;
-      position: relative;
-      min-width: 720px;
-    }
-
-    .menu-toggle {
-      position: absolute;
-      top: 20px;
-      left: 10px;
-      z-index: 2000;
-      background-color: white;
-      border: none;
-      font-size: 22px;
-      cursor: pointer;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
-
-    .tab-content {
-      display: none;
-      height: 100%;
-      overflow-y: auto;
-      padding: 20px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-
-    .search-container {
-      position: relative;
-      width: 260px;
-    }
-
-    .search-container input {
-      padding: 8px 12px 8px 36px;
-      border-radius: 20px;
-      border: none;
-      width: 100%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    .search-container i {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #888;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .filter-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      font-weight: 500;
-    }
-
-    .btn-semua { background-color: #e0e0e0; color: #333; }
-    .btn-cafe { background-color: #d1e7dd; color: #0f5132; }
-    .btn-warung { background-color: #f8d7da; color: #842029; }
-    .btn-rm { background-color: #cfe2ff; color: #084298; }
-
-    .anggota-section {
-      background-color: #f0f4f8;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 600px;
-      margin: auto;
-    }
-
-    .anggota-title {
-      color: #2C3E50;
-      text-align: center;
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-
-    .anggota-subtitle {
-      color: #34495E;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .anggota-list {
-      list-style-type: none;
-      padding: 0;
-      font-size: 18px;
-      color: #2C3E50;
-    }
-
-    .anggota-list li {
-      margin-bottom: 10px;
-    }
-
-    .anggota-list i {
-      margin-right: 10px;
-      color: #2980B9;
+    .btn-masuk:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
   </style>
 </head>
 <body>
 
-<!-- Tombol Toggle -->
-<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <div class="hero">
+    <img src="img/nature.jpg" alt="Bus interior">
+    <div class="text-overlay">
+      <div class="logo-style">Peta Tempat Makan</div>
+      <h1 class="fade-in-up">Hai kamu, mau ke mana?</h1>
+      <p class="fade-in-up">Peta Ini – Siap mengantarmu kemana saja.</p>
 
-<div class="container">
-  <div class="sidebar" id="sidebar">
-    <div class="menu-title">Menu</div>
-    <button class="active" onclick="openTab(event, 'pembahasan')">
-      <i class="fas fa-book-open"></i> Pembahasan
-    </button>
-    <button onclick="openTab(event, 'peta')">
-      <i class="fas fa-map-marked-alt"></i> Peta
-    </button>
-    <button onclick="openTab(event, 'anggota')">
-      <i class="fas fa-info-circle"></i> Informasi
-    </button>
-  </div>
-
-  <div class="main-content">
-    <div id="pembahasan" class="tab-content active">
-      <iframe src="materi_webgis.html" style="width: 100%; height: 100%; border: none;"></iframe>
-    </div>
-
-    <div id="peta" class="tab-content" style="padding: 0; position: relative;">
-      <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
-        <div class="search-container">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Cari tempat..." onkeyup="cariTempat()" />
-        </div>
-        <div class="button-group">
-          <button class="filter-button btn-semua" onclick="tampilkanSemua()">
-            <i class="fas fa-layer-group"></i> Semua
-          </button>
-          <button class="filter-button btn-cafe" onclick="tampilkanCafe()">
-            <i class="fas fa-mug-hot"></i> Cafe
-          </button>
-          <button class="filter-button btn-warung" onclick="tampilkanWarung()">
-            <i class="fas fa-utensils"></i> Warung
-          </button>
-          <button class="filter-button btn-rm" onclick="tampilkanRM()">
-            <i class="fas fa-house"></i> Rumah Makan
-          </button>
-        </div>
-      </div>
-      <div id="map" style="width: 100%; height: 100vh;"></div>
-    </div>
-
-    <div id="anggota" class="tab-content">
-      <div class="anggota-section">
-        <h1 class="anggota-title">Kelompok 7 TIG</h1>
-        <h3 class="anggota-subtitle">Daftar Anggota Kelompok</h3>
-        <ul class="anggota-list">
-          <li><i class="fas fa-user-circle"></i> Yohanes A. Dewa De Yanputra - 51230169</li>
-          <li><i class="fas fa-user-circle"></i> Joshua F. Bere - 51230146</li>
-          <li><i class="fas fa-user-circle"></i> Oscarito R. Panie - 51230155</li>
-          <li><i class="fas fa-user-circle"></i> Roswitha Urbaningsi Tes Bele - 51230160</li>
-          <li><i class="fas fa-user-circle"></i> Puja Samuel Joiz Napu - 51230158</li>
-          <li><i class="fas fa-user-circle"></i> Yoseph Efrem Heka - 51230172</li>
-        </ul>
-      </div>
+      <!-- Tombol Masuk -->
+      <a href="halamanku.html" class="btn btn-primary btn-lg mt-5 btn-masuk fade-in-up">Masuk</a>
     </div>
   </div>
-</div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-  function openTab(evt, tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
-    if (tabId === "peta") setTimeout(() => map.invalidateSize(), 200);
-  }
-
-  function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("hidden");
-  }
-
-  const map = L.map('map').setView([-9.442, 124.478], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
-
-  const iconCafe = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
-  const iconWarung = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
-  const iconRM = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
-  const markerData = [
-    { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe },
-    { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe },
-    { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe },
-    { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe },
-    { name: "RKC Caffe and Resto", coords: [-9.472944, 124.482462], icon: iconCafe },
-    { name: "Warung Banyu Bening", coords: [-9.500114, 124.492373], icon: iconWarung },
-    { name: "Warung Bima", coords: [-9.462478, 124.480333], icon: iconWarung },
-    { name: "Warung Pak Ali Kumis", coords: [-9.476141, 124.482710], icon: iconWarung },
-    { name: "Warung Latansa", coords: [-9.474183, 124.482712], icon: iconWarung },
-    { name: "Warung Sumber Baru", coords: [-9.466499, 124.480819], icon: iconWarung },
-    { name: "RM Pondok Selera", coords: [-9.465652, 124.480726], icon: iconRM },
-    { name: "Restaurant Cita Rasa", coords: [-9.446469, 124.478171], icon: iconRM },
-    { name: "RM Padang 2", coords: [-9.454846, 124.477754], icon: iconRM },
-    { name: "RM Padang \"Sumber Baru\"", coords: [-9.490427, 124.491305], icon: iconRM },
-    { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM },
-    { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM }
-  ];
-
-  const allMarkers = [];
-
-  markerData.forEach(item => {
-    const marker = L.marker(item.coords, { icon: item.icon }).bindPopup(`<b>${item.name}</b>`);
-    marker.category = item.icon === iconCafe ? 'cafe' : item.icon === iconWarung ? 'warung' : 'rm';
-    marker.name = item.name.toLowerCase();
-    allMarkers.push(marker);
-  });
-
-  function hapusSemuaMarker() {
-    allMarkers.forEach(marker => map.removeLayer(marker));
-  }
-
-  function tampilkanSemua() {
-    hapusSemuaMarker();
-    allMarkers.forEach(marker => marker.addTo(map));
-  }
-
-  function tampilkanCafe() {
-    hapusSemuaMarker();
-    allMarkers.filter(m => m.category === 'cafe').forEach(marker => marker.addTo(map));
-  }
-
-  function tampilkanWarung() {
-    hapusSemuaMarker();
-    allMarkers.filter(m => m.category === 'warung').forEach(marker => marker.addTo(map));
-  }
-
-  function tampilkanRM() {
-    hapusSemuaMarker();
-    allMarkers.filter(m => m.category === 'rm').forEach(marker => marker.addTo(map));
-  }
-
-  function cariTempat() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    hapusSemuaMarker();
-    const hasil = allMarkers.filter(marker => marker.name.includes(query));
-    hasil.forEach(marker => {
-      marker.addTo(map);
-      marker.openPopup();
-      map.setView(marker.getLatLng(), 16);
-    });
-    if (query === "") tampilkanSemua();
-  }
-
-  tampilkanSemua();
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
