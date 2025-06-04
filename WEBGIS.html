@@ -14,12 +14,10 @@
       margin: 0;
       font-family: Arial, sans-serif;
     }
-
     #map {
       width: 100%;
       height: 100%;
     }
-
     .search-controls {
       position: absolute;
       top: 10px;
@@ -30,12 +28,10 @@
       gap: 10px;
       align-items: flex-end;
     }
-
     .search-container {
       position: relative;
       width: 260px;
     }
-
     .search-container input {
       padding: 8px 12px 8px 36px;
       border-radius: 20px;
@@ -43,7 +39,6 @@
       width: 100%;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
-
     .search-container i {
       position: absolute;
       left: 12px;
@@ -51,13 +46,11 @@
       transform: translateY(-50%);
       color: #888;
     }
-
     .button-group {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .filter-button {
       display: flex;
       align-items: center;
@@ -70,7 +63,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       font-weight: 500;
     }
-
     .btn-semua { background-color: #e0e0e0; color: #333; }
     .btn-cafe { background-color: #d1e7dd; color: #0f5132; }
     .btn-warung { background-color: #f8d7da; color: #842029; }
@@ -86,18 +78,10 @@
     <input type="text" id="searchInput" placeholder="Cari tempat..." onkeyup="cariTempat()" />
   </div>
   <div class="button-group">
-    <button class="filter-button btn-semua" onclick="tampilkanSemua()">
-      <i class="fas fa-layer-group"></i> Semua
-    </button>
-    <button class="filter-button btn-cafe" onclick="tampilkanCafe()">
-      <i class="fas fa-mug-hot"></i> Cafe
-    </button>
-    <button class="filter-button btn-warung" onclick="tampilkanWarung()">
-      <i class="fas fa-utensils"></i> Warung
-    </button>
-    <button class="filter-button btn-rm" onclick="tampilkanRM()">
-      <i class="fas fa-house"></i> Rumah Makan
-    </button>
+    <button class="filter-button btn-semua" onclick="tampilkanSemua()"><i class="fas fa-layer-group"></i> Semua</button>
+    <button class="filter-button btn-cafe" onclick="tampilkanCafe()"><i class="fas fa-mug-hot"></i> Cafe</button>
+    <button class="filter-button btn-warung" onclick="tampilkanWarung()"><i class="fas fa-utensils"></i> Warung</button>
+    <button class="filter-button btn-rm" onclick="tampilkanRM()"><i class="fas fa-house"></i> Rumah Makan</button>
   </div>
 </div>
 
@@ -111,53 +95,61 @@
   const iconCafe = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
   });
 
   const iconWarung = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
   });
 
   const iconRM = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
   });
 
   const markerData = [
-    { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe },
-    { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe },
-    { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe },
-    { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe },
-    { name: "RKC Caffe and Resto", coords: [-9.472944, 124.482462], icon: iconCafe },
-    { name: "Warung Banyu Bening", coords: [-9.500114, 124.492373], icon: iconWarung },
-    { name: "Warung Bima", coords: [-9.462478, 124.480333], icon: iconWarung },
-    { name: "Warung Pak Ali Kumis", coords: [-9.476141, 124.482710], icon: iconWarung },
-    { name: "Warung Latansa", coords: [-9.474183, 124.482712], icon: iconWarung },
-    { name: "Warung Sumber Baru", coords: [-9.466499, 124.480819], icon: iconWarung },
-    { name: "RM Pondok Selera", coords: [-9.465652, 124.480726], icon: iconRM },
-    { name: "Restaurant Cita Rasa", coords: [-9.446469, 124.478171], icon: iconRM },
-    { name: "RM Padang 2", coords: [-9.454846, 124.477754], icon: iconRM },
-    { name: "RM Padang \"Sumber Baru\"", coords: [-9.490427, 124.491305], icon: iconRM },
-    { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM },
-    { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM }
+    { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nreRAav-9pQZIAQL2SH4aPmD_83DQD0GGRQon77aNqpGa1VuilqzwPlPjzAtVzNRVChO7k39lbLiLhhFlWkusLj6xUkl3HwNEomKlPw9-lI4CVxAOpHFT4eNTWWeo5Pc_txmfE7Xw=w408-h882-k-no" },
+    { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Sisterhood" },
+    { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Boom+Steak" },
+    { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Platinum" },
+    { name: "RKC Caffe and Resto", coords: [-9.472944, 124.482462], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=RKC" },
+    { name: "Xpresso Cafe Kefa", coords: [-9.446748548624845, 124.47891115538647], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Xpresso" },
+    { name: "CAFE NUSANTARA", coords: [-9.464434590085101, 124.48080166002197], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Nusantara" },
+    { name: "Abra coffee", coords: [-9.474421156805388, 124.48274713100169], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Abra" },
+    { name: "KOPI DARI HATI-KEFAMENANU", coords: [-9.468720625970997, 124.48154951839237], icon: iconCafe, image: "https://via.placeholder.com/150x100?text=Kopi+Dari+Hati" },
+    { name: "Warung Banyu Bening", coords: [-9.500114, 124.492373], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Banyu+Bening" },
+    { name: "Warung Murah-Kefamenanu", coords: [-9.45320406954702, 124.47794272634465], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Murah" },
+    { name: "Warung Makan Mas Madi", coords: [-9.461463558448997, 124.4801558816584], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Mas+Madi" },
+    { name: "Simbuang Waroenk", coords: [-9.479258058847996, 124.48534875916657], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Simbuang" },
+    { name: "Warung Bima", coords: [-9.462478, 124.480333], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Bima" },
+    { name: "Warung Pak Ali Kumis", coords: [-9.476141, 124.482710], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Ali+Kumis" },
+    { name: "Warung Latansa", coords: [-9.474183, 124.482712], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Latansa" },
+    { name: "Warung Babi Bakar Hidup Baru", coords: [-9.441556747355053, 124.476930810233], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Babi+Bakar" },
+    { name: "Warung Sumber Baru", coords: [-9.466499, 124.480819], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Sumber+Baru" },
+    { name: "Nusantara Rumah Makan", coords: [-9.44380528090994, 124.47682885879826], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Nusantara+RM" },
+    { name: "Depot dewata", coords: [-9.440874112658001, 124.4791531589311], icon: iconWarung, image: "https://via.placeholder.com/150x100?text=Dewata" },
+    { name: "RM Pondok Selera", coords: [-9.465652, 124.480726], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Pondok+Selera" },
+    { name: "Restaurant Cita Rasa", coords: [-9.446469, 124.478171], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Cita+Rasa" },
+    { name: "RM Padang 2", coords: [-9.454846, 124.477754], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Padang+2" },
+    { name: "RM Padang \"Sumber Baru\"", coords: [-9.490427, 124.491305], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Sumber+Baru+Padang" },
+    { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Kalasan" },
+    { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Restu+Mulia" },
+    { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM, image: "https://via.placeholder.com/150x100?text=Kota+Sari" }
   ];
 
   const allMarkers = [];
 
   markerData.forEach(item => {
-    const marker = L.marker(item.coords, { icon: item.icon }).bindPopup(`<b>${item.name}</b>`);
+    const popupContent = `
+      <div style="text-align:center">
+        <b>${item.name}</b><br/>
+        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100px; height:auto; margin-top:5px;" />` : ""}
+      </div>
+    `;
+    const marker = L.marker(item.coords, { icon: item.icon }).bindPopup(popupContent);
     marker.category = item.icon === iconCafe ? 'cafe' : item.icon === iconWarung ? 'warung' : 'rm';
     marker.name = item.name.toLowerCase();
     allMarkers.push(marker);
