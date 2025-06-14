@@ -9,100 +9,147 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .search-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    max-width: 90vw;
+  }
+
+  .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .search-container input {
+    padding: 8px 12px 8px 36px;
+    border-radius: 20px;
+    border: none;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    font-size: 14px;
+  }
+
+  .search-container i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+  }
+
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .filter-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-weight: 500;
+  }
+
+  .btn-semua { background-color: #e0e0e0; color: #333; }
+  .btn-cafe { background-color: #d1e7dd; color: #0f5132; }
+  .btn-warung { background-color: #f8d7da; color: #842029; }
+  .btn-rm { background-color: #cfe2ff; color: #084298; }
+
+  #hasilPencarian {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 260px;
+    font-size: 14px;
+  }
+
+  .popup-content {
+    text-align: center;
+    max-width: 90vw;
+  }
+
+  .popup-content h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .popup-content img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 8px;
+    object-fit: cover;
+  }
+
+  .popup-table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
+
+  .popup-table th, .popup-table td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .popup-table th {
+    background-color: #f2f2f2;
+  }
+
+  @media (max-width: 600px) {
     .search-controls {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-end;
+      right: 5%;
+      left: 5%;
+      align-items: stretch;
     }
-    .search-container {
-      position: relative;
-      width: 260px;
-    }
-    .search-container input {
-      padding: 8px 12px 8px 36px;
-      border-radius: 20px;
-      border: none;
-      width: 100%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    .search-container i {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #888;
-    }
+
     .button-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      justify-content: center;
     }
-    .filter-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      font-weight: 500;
-    }
-    .btn-semua { background-color: #e0e0e0; color: #333; }
-    .btn-cafe { background-color: #d1e7dd; color: #0f5132; }
-    .btn-warung { background-color: #f8d7da; color: #842029; }
-    .btn-rm { background-color: #cfe2ff; color: #084298; }
 
-    .popup-content {
-  text-align: center;
-  max-width: 300px; /* Atur lebar maksimum popup */
-}
+    .search-container input {
+      font-size: 13px;
+    }
+  }
+</style>
 
-    .popup-content h3 {
-      margin: 0;
-      font-size: 20px;
-      color: #333;
-    }
-    .popup-content img {
-      width: 250px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-top: 8px;
-    }
-    .popup-table {
-      width: 100%;
-      margin-top: 8px;
-      border-collapse: collapse;
-      font-size: 14px;
-      table-layout: fixed;
-      word-wrap: break-word;
-    }
-    .popup-table th, .popup-table td {
-      border: 1px solid #ddd;
-      padding: 6px 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .popup-table th {
-      background-color: #f2f2f2;
-    }
-  </style>
 </head>
 <body>
 
@@ -125,6 +172,10 @@
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Salinan lengkap dari WEBGIS.html dengan modifikasi sesuai permintaan -->
+<!-- BAGIAN YANG DITAMBAHKAN ada tanda // 🔧 TAMBAHAN -->
+
+...
 <script>
   const map = L.map('map').setView([-9.442, 124.478], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -161,7 +212,8 @@
     "Nasi Padang", "Rendang", "Ayam Bakar", "Sayur Lodeh", "Perkedel", "Ikan Bakar", "Sambal Terasi", "Urap", "Telur Balado", "Lalapan"
   ];
 
-  function generateRandomMenuByCategory(category) {
+
+    function generateRandomMenuByCategory(category) {
     let sourceMenu = [];
     if(category === "Cafe") sourceMenu = menuCafe;
     else if(category === "Warung") sourceMenu = menuWarung;
@@ -216,58 +268,73 @@
     markerRefs = [];
 
     markerData.forEach(data => {
-      if(filterIcon && data.icon !== filterIcon) return;
+      if (filterIcon && data.icon !== filterIcon) return;
 
-      if(!data.menu) data.menu = generateRandomMenuByCategory(data.category);
-      if(!data.jamKerja) data.jamKerja = generateRandomJamKerja();
+      if (!data.menu) data.menu = generateRandomMenuByCategory(data.category);
+      if (!data.jamKerja) data.jamKerja = generateRandomJamKerja();
 
       const marker = L.marker(data.coords, { icon: data.icon }).addTo(map);
       marker.bindPopup(buatPopupContent(data));
       markers.push(marker);
       markerRefs.push({ marker: marker, data: data });
+
+      // 🔧 TAMBAHAN: animasi zoom + fokus ke marker saat klik
+      marker.on('click', () => {
+        map.flyTo(data.coords, 17, {
+          duration: 0.8
+        });
+        marker.openPopup();
+        lastClickedMarker = marker;
+      });
     });
   }
 
-function cariTempat() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const hasilDiv = document.getElementById('hasilPencarian');
-  hasilDiv.innerHTML = '';
+  function cariTempat() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const hasilDiv = document.getElementById('hasilPencarian');
+    hasilDiv.innerHTML = '';
 
-  // Hapus semua marker dulu
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
 
-  if (keyword === '') {
-    // Kalau kosong, tampilkan semua marker tanpa hasil pencarian
-    markerRefs.forEach(ref => {
-      ref.marker.addTo(map);
-      markers.push(ref.marker);
-    });
-    return; // keluar fungsi supaya tidak lanjut ke pencarian
-  }
-
-  // Kalau ada keyword, cari sesuai keyword
-  markerRefs.forEach(ref => {
-    const nama = ref.data.name.toLowerCase();
-    if (nama.includes(keyword)) {
-      ref.marker.addTo(map);
-      markers.push(ref.marker);
-
-      const itemHTML = document.createElement('div');
-      itemHTML.style.cursor = 'pointer';
-      itemHTML.style.padding = '6px 4px';
-      itemHTML.style.borderBottom = '1px solid #ddd';
-      itemHTML.innerHTML = `<strong>${ref.data.name}</strong><br><small>${ref.data.coords[0].toFixed(6)}, ${ref.data.coords[1].toFixed(6)}</small>`;
-
-      itemHTML.onclick = () => {
-        map.setView(ref.data.coords, 17);
-        ref.marker.openPopup();
-      };
-
-      hasilDiv.appendChild(itemHTML);
+    if (keyword === '') {
+      markerRefs.forEach(ref => {
+        ref.marker.addTo(map);
+        markers.push(ref.marker);
+      });
+      return;
     }
-  });
-}
+
+    markerRefs.forEach(ref => {
+      const nama = ref.data.name.toLowerCase();
+      if (nama.includes(keyword)) {
+        const itemHTML = document.createElement('div');
+        itemHTML.style.cursor = 'pointer';
+        itemHTML.style.padding = '6px 4px';
+        itemHTML.style.borderBottom = '1px solid #ddd';
+        itemHTML.innerHTML = `<strong>${ref.data.name}</strong><br><small>${ref.data.coords[0].toFixed(6)}, ${ref.data.coords[1].toFixed(6)}</small>`;
+
+        itemHTML.onclick = () => {
+          // 🔧 TAMBAHAN: reset pencarian & marker
+          map.eachLayer(layer => {
+            if (layer instanceof L.Marker) map.removeLayer(layer);
+          });
+
+          ref.marker.addTo(map);
+          map.flyTo(ref.data.coords, 17, { duration: 1 });
+          ref.marker.openPopup();
+          lastClickedMarker = ref.marker;
+
+          document.getElementById('searchInput').value = '';
+          document.getElementById('hasilPencarian').innerHTML = '';
+        };
+
+        hasilDiv.appendChild(itemHTML);
+        ref.marker.addTo(map);
+        markers.push(ref.marker);
+      }
+    });
+  }
 
  function tampilkanSemua() {
     document.getElementById('searchInput').value = '';
@@ -295,15 +362,19 @@ function cariTempat() {
 
   // Inisialisasi pertama
 const markerData = [
-   { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe, image: "https://lh3.googleusercontent.com/p/AF1QipPavAMBMvX1Og86_BSsfTvBQ4GJr9fDMxR5Yog9=w427-h240-k-no", category: "Cafe",  alamat: "Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe, image: "https://lh3.googleusercontent.com/p/AF1QipPavAMBMvX1Og86_BSsfTvBQ4GJr9fDMxR5Yog9=w427-h240-k-no", category: "Cafe",  alamat: "Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nr0ve51kWde22dvWMqTTXwa6-6-UJVjEuZcJR6Og9LOksCTh151Co-M7-ENkPkWzDYt0RrxrhiXAhqB-Tn5C1DMIs3g6m1C9b5QLMb04cHbndFqAxTHfAWZ5zYwpOq3rJRCLe9ndg=w408-h408-k-no", category: "Cafe", alamat: "Jl. Kartini No.61, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
     { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4np_qDZ4r9pnMNfs0zZzI1U7GyPwMg8kfRjyID0IM-syDSyZnkIZ9DVVL_bn2wUzHUEQKDZnSlcFKNRSxiKHiVpDQvDSNel-QFo-OU-xeG5QqS_TyfyiehnDuFrKfTSJljpPsJw9SQ=w408-h725-k-no", category: "Cafe", alamat: "Jl. L. Lake, Benpasi, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no1gn5Or7JvtpnGMrLxoQUtmz-l3eY4fDoDetqaUganjZS66dNxAwShFcQEsTMYQ3HkMSYOJ7JuJyyJohSrEcjq7Ce15oIWKM5AiHDdQyu7BIQkmRYiikNeGyW7haNpy7swA9M=w408-h725-k-no", category: "Cafe", alamat: "Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RKC Caffe and Resto", coords: [-9.472944, 124.482462], icon: iconCafe, image: "https://img.inews.co.id/media/600/files/networks/2023/07/29/b39e7_resto.jpeg", category: "Cafe", alamat: "GFGJ+RX7, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Xpresso Cafe Kefa", coords: [-9.446748548624845, 124.47891115538647], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrv5JXIbkk1CN48S9REPgpFvOT0UdGU8Bx30jC7rrCyfdJS7Kz_-Vqg5dldZOTSKlCruVvtx6AZka626kIpJW2oNtH-qdaO0137wTm1pMhSTUl85_W9X6YDvSZOTWwLLo1SrfBx=w426-h240-k-no", category: "Cafe", alamat: "HF3H+7GX, Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "CAFE NUSANTARA", coords: [-9.464434590085101, 124.48080166002197], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npfTCLPoxE-xeSqc7KLWwUjSlu8EoxVK3I-9UzngaN3U47LNuNJLl5c1adhmqCjumA71s2tljSQHXczLTdtzHFq9kLlXadSJYvH851st_JNoC0o-eU1zB76snzs5sfx2bcFUyCxNA=w408-h306-k-no", category: "Cafe", alamat: "Jl. Eltari No.km 3, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "Abra coffee", coords: [-9.474421156805388, 124.48274713100169], icon: iconCafe, image: "https://lh3.googleusercontent.com/p/AF1QipNEBudjeGAEKApW3wdubHbAc1_mPv3qYPk_x57T=w493-h240-k-no", category: "Cafe", alamat: "Jl. Eltari No.km 4, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "KOPI DARI HATI-KEFAMENANU", coords: [-9.468720625970997, 124.48154951839237], icon: iconCafe, image: "https://via.placeholder.com/100?text=Kopi+Hati", category: "Cafe", alamat: "Jl. Eltari No.77 RW No.Km.4, Kefamenanu Selatan, Kota Kefamenanu, North Central Timor Regency, East Nusa Tenggara 85613" },
+    { name: "Warung Banyu Bening", coords: [-9.500114, 124.492373], icon: iconWarung, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqgfCgR4XClTy6PbL2JGRv68RBhN4ngOKlVETzLPkwkCPxyv4IgWF6xjTqzXtlSQtdMTTWno9jsBqQfPcEVoU9dC169cRNYA1OY_edhJ0SZGg58-j_ySBx63dw2bZ9nde1hNq0O=w426-h240-k-no", category: "Warung", alamat: "FFXR+WXJ, Jl. Eltari, Sasi, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "Warung Murah-Kefamenanu", coords: [-9.45320406954702, 124.47794272634465], icon: iconWarung, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=tSe21PsCmf7CFDIuFokG0w&cb_client=search.gws-prod.gps&w=408&h=240&yaw=67.546364&pitch=0&thumbfov=100", category: "Warung", alamat: "GFWH+957, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Warung Makan Mas Madi", coords: [-9.461463558448997, 124.4801558816584], icon: iconWarung, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrRPhIZTOn685B1suMqI0uRUYyN0x5FC1XDX3fn_5QrvZgtjpJGi6AxEu5fIHBsi80jZqeSO3jF7ifaTEQ8POztGM0r88Qtc76aUs9mVnfyJY8Z3ifmlPxmg0-e3gZ4tXPPYvod8w=w426-h240-k-no", category: "Warung", alamat: "GFQJ+93J, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "Simbuang Waroenk", coords: [-9.479258058847996, 124.48534875916657], icon: iconWarung, image: "https://lh3.googleusercontent.com/p/AF1QipPLsq5UsUL6eB6Dmmv_fTZHCkMFZY7261x6X9T2=w408-h306-k-no", category: "Warung", alamat: "Jl. Eltari No.Km 4, Jurusan Kupang, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
     { name: "Warung Bima", coords: [-9.462478, 124.480333], icon: iconWarung, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqk7-g5tuuecLoEbCu9Td7h77_N51CVYsr2ik6DV9tTCoZo9CIu3SBhNaR-DURVF2ULqU02zo4lbXDbLPsFitK44bDVG9SVj3_ls470nqm9Lr5wMZTU54XXKTVQaflD7OSMk4jg=w426-h240-k-no", category: "Warung", alamat: "Jl. Eltari No.3, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Warung Pak Ali Kumis", coords: [-9.476141, 124.482710], icon: iconWarung, image: "https://lh3.googleusercontent.com/p/AF1QipP1qXDxM9DukbRXTbsR2JhKdFcm7kfK3CV-Mrk7=w424-h240-k-no", category: "Warung", alamat: "Maubeli, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Warung Latansa", coords: [-9.474183, 124.482712], icon: iconWarung, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqiMA6WGjrjScOhlb6Yub9eOxWkRwfsNdDRMlGn5iZAJreaDhjyZWpyFeLau8KeEOtjQiLaUqL50M_5as-GWxHiiBhfWj83J6VtobZBKBRj6MLDpIoYBnfqw9waRHBbUnVwRqM=w408-h306-k-no", category: "Warung", alamat: "GFGM+73P, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
@@ -314,11 +385,14 @@ const markerData = [
     { name: "Restaurant Cita Rasa", coords: [-9.446469, 124.478171], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=_VfUSfdGq7BS2Mp4pPUdqQ&cb_client=search.gws-prod.gps&w=408&h=240&yaw=28.455706&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "HF3H+C74, Jl. Soekarno, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RM Padang 2", coords: [-9.454846, 124.477754], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npKzAYOwyM0Iaat3V5YacSNqe-UXnUHz3jX7Qx9b4d08Cx2BvEEnw5qIQlf9QEjsQLv3s0qX8w6qfrnIzha3ce8Y684axQNICAL8OgLWGXAuuJhkS-acKTHGPxODdi9ZegoZSQa=w408-h306-k-no", category: "Rumah Makan", alamat: "GFWH+342, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RM Padang \"Sumber Baru\"", coords: [-9.490427, 124.491305], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=Fk3lkXHiA5-SLuwRkwKbKQ&cb_client=search.gws-prod.gps&w=408&h=240&yaw=93.28632&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "Samping Martabak Terang Bulan KM1, Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
+    { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=ouyVvMpRi0MRHRMBli9OiA&cb_client=maps_sv.tactile.gps&w=224&h=298&yaw=67.01211&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "GF7R+25C, Maubeli, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_ZXTfKOXCbSVBMAl1TymD3efdJbzQnGMKV6wf8uUJg_jgC_W37peRZPPsIao6GH84jxXg8_I0uDwI_Gt3PC1z8V-8oHDPEXrVBawSnXEzDaya2iaR9oiHNtPyTdlUDFl8oOABGA=w397-h298-k-no", category: "Rumah Makan", alamat: "GFHJ+RMF, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM, image: "https://lh3.googleusercontent.com/p/AF1QipP0Urj3iFhf8juHUGK_TYUz6ue7025JDmccwcOy=w408-h306-k-no", category: "Rumah Makan", alamat: "Jl. Sisingamangaraja, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
 ];
+
 tampilkanSemua();
 </script>
+
 
 </script>
 </script>
