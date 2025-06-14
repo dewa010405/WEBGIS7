@@ -114,13 +114,18 @@
   }
 
   .popup-table {
-    width: 100%;
-    margin-top: 8px;
-    border-collapse: collapse;
-    font-size: 14px;
-    table-layout: fixed;
-    word-wrap: break-word;
-  }
+  width: 100%;
+  margin-top: 6px;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+.popup-table th, .popup-table td {
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+}
+
 
   .popup-table th, .popup-table td {
     border: 1px solid #ddd;
@@ -236,31 +241,39 @@
   let markers = [];
   let markerRefs = [];
 
-  function buatPopupContent(data) {
-    const jamKerja = data.jamKerja;
+const popupWidth = 200;
+const popupImageWidth = 180;
 
-    const menuHTML = `
-      <table class="popup-table">
-        <thead><tr><th>Menu</th></tr></thead>
-        <tbody><tr><td>${data.menu.join(', ')}</td></tr></tbody>
-      </table>
-    `;
-    const jamKerjaHTML = `
-      <table class="popup-table" style="margin-top:6px;">
-        <thead><tr><th>Jam Buka</th></tr></thead>
-        <tbody><tr><td>${jamKerja}</td></tr></tbody>
-      </table>
-    `;
-    return `
-  <div class="popup-content">
-    <h3>${data.name}</h3>
-    <img src="${data.image}" alt="${data.name}" />
-    <p style="margin: 6px 0; font-size: 14px; color: #555;"><strong>Alamat:</strong><br>${data.alamat}</p>
-    ${menuHTML}
-    ${jamKerjaHTML}
-  </div>
-`;
+function buatPopupContent(data) {
+  const jamKerja = data.jamKerja;
+
+  const menuHTML = `
+    <table class="popup-table">
+      <thead><tr><th>Menu</th></tr></thead>
+      <tbody><tr><td>${data.menu.join(', ')}</td></tr></tbody>
+    </table>
+  `;
+
+  const jamKerjaHTML = `
+    <table class="popup-table" style="margin-top:6px;">
+      <thead><tr><th>Jam Buka</th></tr></thead>
+      <tbody><tr><td>${jamKerja}</td></tr></tbody>
+    </table>
+  `;
+
+  return `
+    <div class="popup-content" style="max-width: ${popupWidth}px;">
+      <h3 style="font-size: 16px;">${data.name}</h3>
+      <img src="${data.image}" alt="${data.name}" 
+        style="width: ${popupImageWidth}px; height: 120px; object-fit: cover; border-radius: 6px; margin-top: 6px;" />
+      <p style="margin: 6px 0; font-size: 13px; color: #555;"><strong>Alamat:</strong><br>${data.alamat}</p>
+      ${menuHTML}
+      ${jamKerjaHTML}
+    </div>
+  `;
 }
+
+
 
   function tampilkanMarkers(filterIcon = null) {
     markers.forEach(m => map.removeLayer(m));
