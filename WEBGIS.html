@@ -13,13 +13,11 @@
       height: 100%;
       margin: 0;
       font-family: Arial, sans-serif;
-      overflow: hidden;
     }
     #map {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
     }
-
     .search-controls {
       position: absolute;
       top: 10px;
@@ -30,13 +28,10 @@
       gap: 10px;
       align-items: flex-end;
     }
-
     .search-container {
       position: relative;
-      width: 90%;
-      max-width: 260px;
+      width: 260px;
     }
-
     .search-container input {
       padding: 8px 12px 8px 36px;
       border-radius: 20px;
@@ -44,7 +39,6 @@
       width: 100%;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
-
     .search-container i {
       position: absolute;
       left: 12px;
@@ -52,176 +46,255 @@
       transform: translateY(-50%);
       color: #888;
     }
-
     .button-group {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
-      justify-content: flex-end;
     }
-
     .filter-button {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 12px;
+      padding: 8px 16px;
       border: none;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       font-weight: 500;
     }
-
     .btn-semua { background-color: #e0e0e0; color: #333; }
     .btn-cafe { background-color: #d1e7dd; color: #0f5132; }
     .btn-warung { background-color: #f8d7da; color: #842029; }
     .btn-rm { background-color: #cfe2ff; color: #084298; }
 
-    @media (max-width: 480px) {
-      .search-controls {
-        right: 5px;
-        left: 5px;
-        align-items: stretch;
-      }
+    .popup-content {
+  text-align: center;
+  max-width: 300px; /* Atur lebar maksimum popup */
+}
 
-      .button-group {
-        justify-content: center;
-      }
-
-      .filter-button {
-        font-size: 12px;
-        padding: 6px 10px;
-      }
+    .popup-content h3 {
+      margin: 0;
+      font-size: 20px;
+      color: #333;
+    }
+    .popup-content img {
+      width: 250px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .popup-table {
+      width: 100%;
+      margin-top: 8px;
+      border-collapse: collapse;
+      font-size: 14px;
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
+    .popup-table th, .popup-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .popup-table th {
+      background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <div id="map"></div>
 
-  <div class="search-controls">
-    <div class="search-container">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Cari tempat..." onkeyup="cariTempat()" />
-    </div>
-
-    <div id="hasilPencarian" style="background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); padding: 10px; max-height: 200px; overflow-y: auto; width: 260px; font-size: 14px;"></div>
-
-    <div class="button-group">
-      <button class="filter-button btn-semua" onclick="tampilkanSemua()"><i class="fas fa-layer-group"></i> Semua</button>
-      <button class="filter-button btn-cafe" onclick="tampilkanCafe()"><i class="fas fa-mug-hot"></i> Cafe</button>
-      <button class="filter-button btn-warung" onclick="tampilkanWarung()"><i class="fas fa-utensils"></i> Warung</button>
-      <button class="filter-button btn-rm" onclick="tampilkanRM()"><i class="fas fa-house"></i> Rumah Makan</button>
-    </div>
+<div id="map"></div>
+<div class="search-controls">
+  <div class="search-container">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Cari tempat..." onkeyup="cariTempat()" />
   </div>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    const map = L.map('map').setView([-9.442, 124.478], 14);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+  <!-- Tambahan: hasil pencarian -->
+  <div id="hasilPencarian" style="background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); padding: 10px; max-height: 200px; overflow-y: auto; width: 260px; font-size: 14px;"></div>
 
-    const dataTempat = [
-      {
-        nama: "Cafe Kopi Kefa",
-        jenis: "cafe",
-        lat: -9.438,
-        lng: 124.482,
-        deskripsi: "Tempat nongkrong dengan kopi lokal.",
-      },
-      {
-        nama: "Warung Makan Sederhana",
-        jenis: "warung",
-        lat: -9.444,
-        lng: 124.474,
-        deskripsi: "Warung dengan menu harian rumahan.",
-      },
-      {
-        nama: "Rumah Makan Nusantara",
-        jenis: "rm",
-        lat: -9.440,
-        lng: 124.480,
-        deskripsi: "Rumah makan keluarga dengan menu lengkap.",
-      },
-      {
-        nama: "Cafe Sunset",
-        jenis: "cafe",
-        lat: -9.445,
-        lng: 124.470,
-        deskripsi: "Cafe dengan pemandangan matahari terbenam.",
-      }
-    ];
+  <div class="button-group">
+    <button class="filter-button btn-semua" onclick="tampilkanSemua()"><i class="fas fa-layer-group"></i> Semua</button>
+    <button class="filter-button btn-cafe" onclick="tampilkanCafe()"><i class="fas fa-mug-hot"></i> Cafe</button>
+    <button class="filter-button btn-warung" onclick="tampilkanWarung()"><i class="fas fa-utensils"></i> Warung</button>
+    <button class="filter-button btn-rm" onclick="tampilkanRM()"><i class="fas fa-house"></i> Rumah Makan</button>
+  </div>
+</div>
 
-    const ikon = {
-      cafe: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/3069/3069178.png', iconSize: [30, 30] }),
-      warung: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/706/706164.png', iconSize: [30, 30] }),
-      rm: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/1905/1905629.png', iconSize: [30, 30] }),
-    };
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const map = L.map('map').setView([-9.442, 124.478], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
-    const markers = [];
+  const iconCafe = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+  });
 
-    dataTempat.forEach(tempat => {
-      const marker = L.marker([tempat.lat, tempat.lng], { icon: ikon[tempat.jenis] })
-        .addTo(map)
-        .bindPopup(`<b>${tempat.nama}</b><br>${tempat.deskripsi}`);
-      marker.jenis = tempat.jenis;
-      marker.nama = tempat.nama.toLowerCase();
+  const iconWarung = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+  });
+
+  const iconRM = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+  });
+
+  const menuCafe = [
+    "Kopi Hitam", "Espresso", "Cappuccino", "Latte", "Roti Bakar", "Cake Coklat", "Brownies", "Jus Jeruk", "Smoothie", "Sandwich"
+  ];
+
+  const menuWarung = [
+    "Nasi Goreng", "Soto Ayam", "Bakso", "Tahu Isi", "Es Teh Manis", "Ayam Goreng", "Kerupuk", "Sayur Asem", "Pecel", "Tempe Goreng"
+  ];
+
+  const menuRM = [
+    "Nasi Padang", "Rendang", "Ayam Bakar", "Sayur Lodeh", "Perkedel", "Ikan Bakar", "Sambal Terasi", "Urap", "Telur Balado", "Lalapan"
+  ];
+
+  function generateRandomMenuByCategory(category) {
+    let sourceMenu = [];
+    if(category === "Cafe") sourceMenu = menuCafe;
+    else if(category === "Warung") sourceMenu = menuWarung;
+    else if(category === "Rumah Makan") sourceMenu = menuRM;
+
+    const pilihan = [];
+    while(pilihan.length < 3 && pilihan.length < sourceMenu.length) {
+      const item = sourceMenu[Math.floor(Math.random() * sourceMenu.length)];
+      if(!pilihan.includes(item)) pilihan.push(item);
+    }
+    return pilihan;
+  }
+
+  function generateRandomJamKerja() {
+    const buka = Math.floor(Math.random() * 4) + 7;
+    const tutup = buka + Math.floor(Math.random() * 5) + 6;
+    return `${buka}:00 - ${tutup}:00 WIB`;
+  }
+
+  let markers = [];
+  let markerRefs = [];
+
+  function buatPopupContent(data) {
+    const jamKerja = data.jamKerja;
+
+    const menuHTML = `
+      <table class="popup-table">
+        <thead><tr><th>Menu</th></tr></thead>
+        <tbody><tr><td>${data.menu.join(', ')}</td></tr></tbody>
+      </table>
+    `;
+    const jamKerjaHTML = `
+      <table class="popup-table" style="margin-top:6px;">
+        <thead><tr><th>Jam Buka</th></tr></thead>
+        <tbody><tr><td>${jamKerja}</td></tr></tbody>
+      </table>
+    `;
+    return `
+  <div class="popup-content">
+    <h3>${data.name}</h3>
+    <img src="${data.image}" alt="${data.name}" />
+    <p style="margin: 6px 0; font-size: 14px; color: #555;"><strong>Alamat:</strong><br>${data.alamat}</p>
+    ${menuHTML}
+    ${jamKerjaHTML}
+  </div>
+`;
+}
+
+  function tampilkanMarkers(filterIcon = null) {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+    markerRefs = [];
+
+    markerData.forEach(data => {
+      if(filterIcon && data.icon !== filterIcon) return;
+
+      if(!data.menu) data.menu = generateRandomMenuByCategory(data.category);
+      if(!data.jamKerja) data.jamKerja = generateRandomJamKerja();
+
+      const marker = L.marker(data.coords, { icon: data.icon }).addTo(map);
+      marker.bindPopup(buatPopupContent(data));
       markers.push(marker);
+      markerRefs.push({ marker: marker, data: data });
     });
+  }
 
-    function tampilkanSemua() {
-      markers.forEach(marker => map.addLayer(marker));
+function cariTempat() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  const hasilDiv = document.getElementById('hasilPencarian');
+  hasilDiv.innerHTML = '';
+
+  // Hapus semua marker dulu
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+
+  if (keyword === '') {
+    // Kalau kosong, tampilkan semua marker tanpa hasil pencarian
+    markerRefs.forEach(ref => {
+      ref.marker.addTo(map);
+      markers.push(ref.marker);
+    });
+    return; // keluar fungsi supaya tidak lanjut ke pencarian
+  }
+
+  // Kalau ada keyword, cari sesuai keyword
+  markerRefs.forEach(ref => {
+    const nama = ref.data.name.toLowerCase();
+    if (nama.includes(keyword)) {
+      ref.marker.addTo(map);
+      markers.push(ref.marker);
+
+      const itemHTML = document.createElement('div');
+      itemHTML.style.cursor = 'pointer';
+      itemHTML.style.padding = '6px 4px';
+      itemHTML.style.borderBottom = '1px solid #ddd';
+      itemHTML.innerHTML = `<strong>${ref.data.name}</strong><br><small>${ref.data.coords[0].toFixed(6)}, ${ref.data.coords[1].toFixed(6)}</small>`;
+
+      itemHTML.onclick = () => {
+        map.setView(ref.data.coords, 17);
+        ref.marker.openPopup();
+      };
+
+      hasilDiv.appendChild(itemHTML);
     }
+  });
+}
 
-    function tampilkanCafe() {
-      markers.forEach(marker => {
-        marker.jenis === "cafe" ? map.addLayer(marker) : map.removeLayer(marker);
-      });
-    }
+ function tampilkanSemua() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('hasilPencarian').innerHTML = '';
+    tampilkanMarkers(null);
+  }
 
-    function tampilkanWarung() {
-      markers.forEach(marker => {
-        marker.jenis === "warung" ? map.addLayer(marker) : map.removeLayer(marker);
-      });
-    }
+  function tampilkanCafe() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('hasilPencarian').innerHTML = '';
+    tampilkanMarkers(iconCafe);
+  }
 
-    function tampilkanRM() {
-      markers.forEach(marker => {
-        marker.jenis === "rm" ? map.addLayer(marker) : map.removeLayer(marker);
-      });
-    }
+  function tampilkanWarung() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('hasilPencarian').innerHTML = '';
+    tampilkanMarkers(iconWarung);
+  }
 
-    function cariTempat() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const hasil = document.getElementById('hasilPencarian');
-      hasil.innerHTML = "";
+  function tampilkanRM() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('hasilPencarian').innerHTML = '';
+    tampilkanMarkers(iconRM);
+  }
 
-      if (!input) {
-        hasil.innerHTML = "<i>Ketik nama tempat...</i>";
-        return;
-      }
-
-      const cocok = markers.filter(marker => marker.nama.includes(input));
-      if (cocok.length === 0) {
-        hasil.innerHTML = "<i>Tidak ditemukan</i>";
-        return;
-      }
-
-      cocok.forEach(marker => {
-        const elemen = document.createElement("div");
-        elemen.style.cursor = "pointer";
-        elemen.style.padding = "6px 0";
-        elemen.innerHTML = `<b>${marker.nama}</b>`;
-        elemen.onclick = () => {
-          map.setView(marker.getLatLng(), 16);
-          marker.openPopup();
-        };
-        hasil.appendChild(elemen);
-      });
-    }
-
-   const markerData = [
+  // Inisialisasi pertama
+const markerData = [
     { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe, image: "https://lh3.googleusercontent.com/p/AF1QipPavAMBMvX1Og86_BSsfTvBQ4GJr9fDMxR5Yog9=w427-h240-k-no", category: "Cafe",  alamat: "Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nr0ve51kWde22dvWMqTTXwa6-6-UJVjEuZcJR6Og9LOksCTh151Co-M7-ENkPkWzDYt0RrxrhiXAhqB-Tn5C1DMIs3g6m1C9b5QLMb04cHbndFqAxTHfAWZ5zYwpOq3rJRCLe9ndg=w408-h408-k-no", category: "Cafe", alamat: "Jl. Kartini No.61, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
     { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4np_qDZ4r9pnMNfs0zZzI1U7GyPwMg8kfRjyID0IM-syDSyZnkIZ9DVVL_bn2wUzHUEQKDZnSlcFKNRSxiKHiVpDQvDSNel-QFo-OU-xeG5QqS_TyfyiehnDuFrKfTSJljpPsJw9SQ=w408-h725-k-no", category: "Cafe", alamat: "Jl. L. Lake, Benpasi, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
@@ -249,7 +322,16 @@
     { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_ZXTfKOXCbSVBMAl1TymD3efdJbzQnGMKV6wf8uUJg_jgC_W37peRZPPsIao6GH84jxXg8_I0uDwI_Gt3PC1z8V-8oHDPEXrVBawSnXEzDaya2iaR9oiHNtPyTdlUDFl8oOABGA=w397-h298-k-no", category: "Rumah Makan", alamat: "GFHJ+RMF, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM, image: "https://lh3.googleusercontent.com/p/AF1QipP0Urj3iFhf8juHUGK_TYUz6ue7025JDmccwcOy=w408-h306-k-no", category: "Rumah Makan", alamat: "Jl. Sisingamangaraja, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
 ];
-    tampilkanSemua();
-  </script>
+
+tampilkanSemua();
+</script>
+
+</script>
+</script>
 </body>
 </html>
+
+
+
+
+
