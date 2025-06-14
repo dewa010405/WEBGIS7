@@ -2,127 +2,37 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hero Gambar + Kontainer Animasi</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { height: 100%; font-family: 'Poppins', sans-serif; overflow: hidden; }
-
-     * {
+    *, *::before, *::after {
       box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f5f7fa;
+    html, body {
       margin: 0;
       padding: 0;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    #infoContainer {
-      max-width: 1000px;
-      margin: 40px;
-      background: #fff;
-      padding: 50px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    }
-
-    h3 {
-      font-size: 2.4em;
-      margin-bottom: 10px;
-      color: #007BFF;
-      text-align: center;
-    }
-
-    h4 {
-      color: #444;
-      margin-top: 30px;
-      font-size: 1.5em;
-      border-left: 5px solid #007BFF;
-      padding-left: 10px;
-    }
-
-    h5 {
-      margin-top: 20px;
-      font-weight: 600;
-      color: #007BFF;
-    }
-
-    p {
-      margin: 10px 0;
-      font-size: 1em;
-    }
-
-    ul {
-      padding-left: 20px;
-      margin-top: 10px;
-    }
-
-    ul li {
-      margin: 6px 0;
-    }
-
-    table {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      overflow-x: auto;
-      display: block;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      overflow: hidden;
     }
-
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border: 1px solid #ccc;
-    }
-
-    th {
-      background-color: #007BFF;
-      color: white;
-      font-weight: 600;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    tr:hover {
-      background-color: #eef6ff;
-    }
-
-    @media screen and (max-width: 768px) {
-      #materiWebGIS {
-        padding: 20px;
-      }
-
-      h3 {
-        font-size: 1.6em;
-      }
-
-      h4 {
-        font-size: 1.2em;
-      }
-    } /* <-- Ini yang hilang, tanda tutup kurung */
 
     .hero {
       position: relative;
-      width: 100%;
+      width: 100vw;
       height: 100vh;
       overflow: hidden;
     }
 
     .hero img.bg {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
       position: absolute;
       top: 0;
@@ -134,7 +44,7 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      font-size: 48px;
+      font-size: 2.5rem;
       font-weight: 600;
       color: white;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
@@ -147,27 +57,26 @@
       0% { opacity: 0; transform: translateY(-30px); }
       100% { opacity: 1; transform: translateY(0); }
     }
-
-    .container-wrapper {
+      .container-wrapper {
       position: relative;
       z-index: 2;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      gap: 30px;
-      padding: 40px;
+      gap: 20px;
+      padding: 2rem;
       height: calc(100% - 100px);
     }
 
     .box {
       background: linear-gradient(135deg, #ffffff, #f0f0f0);
       border: 2px solid #e0e0e0;
-      width: 250px;
-      height: 250px;
+      width: 240px;
+      height: 240px;
       border-radius: 16px;
       color: #333;
-      font-size: 20px;
+      font-size: 1.2rem;
       font-weight: 600;
       display: flex;
       justify-content: center;
@@ -193,13 +102,16 @@
     .box:nth-child(3) { animation-delay: 0.6s; }
 
     @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .icon {
-      width: 100px;
+      width: 80px;
       height: auto;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .box div {
@@ -210,17 +122,38 @@
 
     .box div::after {
       content: attr(data-label);
-      font-size: 18px;
+      font-size: 1rem;
       color: #2c3e50;
-      margin-top: 10px;
+      margin-top: 8px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     @media (max-width: 768px) {
-      .container-wrapper { flex-direction: column; }
-      .box { width: 80%; }
-      .main-title { font-size: 32px; margin-top: 20px; }
+      .container-wrapper {
+        flex-direction: column;
+        height: auto;
+        padding: 1.5rem;
+      }
+
+      .box {
+        width: 90%;
+        height: auto;
+        padding: 1.5rem 0;
+      }
+
+      .main-title {
+        font-size: 2rem;
+        margin-top: 1.5rem;
+      }
+
+      .icon {
+        width: 60px;
+      }
+
+      .box div::after {
+        font-size: 0.9rem;
+      }
     }
 
     #anggota-container {
@@ -229,43 +162,44 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255,255,255,0.95);
+      background-color: rgba(255, 255, 255, 0.95);
       transition: bottom 0.5s ease;
       z-index: 3;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      padding: 2rem 1rem;
       text-align: left;
       overflow-y: auto;
     }
 
-    #anggota-container.show { bottom: 0; }
+    #anggota-container.show {
+      bottom: 0;
+    }
 
     .anggota-box {
       max-width: 600px;
+      width: 100%;
       background: white;
       border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      color: #333;
+      padding: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
     .anggota-box h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
-      color: #2c3e50;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
       text-align: center;
     }
 
     .anggota-box ol {
-      padding-left: 20px;
-      line-height: 1.8;
+      padding-left: 1.5rem;
+      line-height: 1.6;
     }
 
     .close-btn {
-      margin-top: 30px;
-      padding: 10px 20px;
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
       background-color: #2c3e50;
       color: white;
       border: none;
@@ -280,58 +214,74 @@
 
     .modal-container {
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background: white;
       z-index: 4;
       display: none;
       flex-direction: column;
-      padding: 20px;
+      padding: 1rem;
       overflow-y: auto;
     }
 
-    .modal-container.show { display: flex; }
+    .modal-container.show {
+      display: flex;
+    }
 
     .modal-container .close-btn {
       align-self: flex-end;
-      margin-bottom: 10px;
+      margin-bottom: 1rem;
     }
 
     .modal-container iframe {
       flex-grow: 1;
       width: 100%;
-      height: 100%;
+      min-height: 400px;
       border: none;
       border-radius: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .anggota-box {
+        padding: 1.2rem;
+      }
+
+      .anggota-box h2 {
+        font-size: 1.2rem;
+      }
+
+      .modal-container iframe {
+        min-height: 300px;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="hero">
     <img src="nature2.jpg" alt="Latar belakang alam" class="bg" />
-    <h1 class="main-title">Peta tempat Makanan</h1>
+    <h1 class="main-title">Peta Tempat Makanan</h1>
 
     <div class="container-wrapper" id="main-container">
       <!-- Informasi -->
       <div class="box" id="btnInformasi">
         <div data-label="Informasi">
-          <img src="icon3.png" alt="Ikon Informasi" class="icon" />
+          <img src="img/icon3.png" alt="Ikon Informasi" class="icon" />
         </div>
       </div>
 
       <!-- Lihat Peta -->
       <div class="box" id="btnPeta">
         <div data-label="Lihat Peta">
-          <img src="icon2.png" alt="Ikon Peta" class="icon" />
+          <img src="img/icon2.png" alt="Ikon Peta" class="icon" />
         </div>
       </div>
 
       <!-- Daftar Anggota -->
       <div class="box" id="btnAnggota">
         <div data-label="Daftar Anggota">
-          <img src="icon1.png" alt="Ikon Anggota" class="icon" />
+          <img src="img/icon1.png" alt="Ikon Anggota" class="icon" />
         </div>
       </div>
     </div>
@@ -352,81 +302,50 @@
       </div>
     </div>
 
-      <!-- Modal Informasi -->
+    <!-- Modal Informasi -->
     <div class="modal-container" id="infoContainer">
       <button class="close-btn" onclick="tutupModal('infoContainer')">Tutup</button>
       <div style="flex-grow: 1; overflow-y: auto;">
         <h3>Materi Lengkap Seputar WebGIS</h3>
 
-    <h4>1. Pengertian WebGIS</h4>
-    <p>WebGIS (Web Geographic Information System) adalah sistem informasi geografis yang berjalan melalui web browser dan memungkinkan pengguna mengakses dan menganalisis data spasial dari mana saja.</p>
+        <h4>1. Pengertian WebGIS</h4>
+        <p>WebGIS (Web Geographic Information System) adalah sistem informasi geografis yang berjalan melalui web browser dan memungkinkan pengguna mengakses dan menganalisis data spasial dari mana saja.</p>
 
-    <h4>Perbedaan GIS dan WebGIS</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>Aspek</th>
-          <th>GIS (Desktop)</th>
-          <th>WebGIS</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Akses</td>
-          <td>Melalui aplikasi desktop</td>
-          <td>Melalui browser web</td>
-        </tr>
-        <tr>
-          <td>Instalasi</td>
-          <td>Harus instal software khusus</td>
-          <td>Tidak perlu instal software</td>
-        </tr>
-        <tr>
-          <td>Distribusi</td>
-          <td>Terbatas pada pengguna tertentu</td>
-          <td>Dapat diakses publik atau terbatas</td>
-        </tr>
-        <tr>
-          <td>Interaksi</td>
-          <td>Lebih kompleks dan kaya fitur</td>
-          <td>Lebih mudah dan interaktif</td>
-        </tr>
-      </tbody>
-    </table>
+        <h4>Perbedaan GIS dan WebGIS</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Aspek</th>
+              <th>GIS (Desktop)</th>
+              <th>WebGIS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Akses</td><td>Melalui aplikasi desktop</td><td>Melalui browser web</td></tr>
+            <tr><td>Instalasi</td><td>Harus instal software khusus</td><td>Tidak perlu instal software</td></tr>
+            <tr><td>Distribusi</td><td>Terbatas pada pengguna tertentu</td><td>Dapat diakses publik atau terbatas</td></tr>
+            <tr><td>Interaksi</td><td>Lebih kompleks dan kaya fitur</td><td>Lebih mudah dan interaktif</td></tr>
+          </tbody>
+        </table>
 
-    <h4>2. Komponen Utama WebGIS</h4>
-    <ul>
-      <li><strong>Data Spasial:</strong> Data berbasis lokasi seperti peta jalan, sungai, dan batas wilayah.</li>
-      <li><strong>Data Atribut:</strong> Informasi tambahan seperti nama lokasi, kepadatan penduduk, dll.</li>
-      <li><strong>Server GIS:</strong> Tempat pengolahan dan penyimpanan data spasial.</li>
-      <li><strong>Client:</strong> Browser atau aplikasi yang digunakan pengguna untuk mengakses WebGIS.</li>
-      <li><strong>Jaringan:</strong> Media komunikasi yang menghubungkan client dan server, seperti internet.</li>
-    </ul>
+        <h4>2. Komponen Utama WebGIS</h4>
+        <ul>
+          <li><strong>Data Spasial:</strong> Peta jalan, sungai, batas wilayah, dll.</li>
+          <li><strong>Data Atribut:</strong> Info tambahan seperti nama, kepadatan, dll.</li>
+          <li><strong>Server GIS:</strong> Tempat pengolahan data.</li>
+          <li><strong>Client:</strong> Browser / aplikasi pengguna.</li>
+          <li><strong>Jaringan:</strong> Internet atau LAN sebagai penghubung.</li>
+        </ul>
 
-    <h4>3. Arsitektur WebGIS</h4>
-    <p>WebGIS biasanya menggunakan arsitektur client-server yang terdiri dari:</p>
+        <h4>3. Arsitektur WebGIS</h4>
+        <p>Client - Web Server - GIS Server - Database Spasial</p>
 
-    <h5>3.1. Client (User Interface)</h5>
-    <p>Browser atau aplikasi yang menampilkan peta. Contoh: Google Maps, Leaflet.</p>
-
-    <h5>3.2. Web Server</h5>
-    <p>Menangani permintaan data dan komunikasi antara client dan GIS server.</p>
-
-    <h5>3.3. GIS Server</h5>
-    <p>Menyediakan layanan pemetaan dan analisis spasial. Contoh: GeoServer, ArcGIS Server.</p>
-
-    <h5>3.4. Database Spasial</h5>
-    <p>Menyimpan data spasial dan atribut. Contoh: PostGIS, Oracle Spatial.</p>
-
-    <h4>4. Jenis Layanan WebGIS</h4>
-    <h5>4.1. WMS (Web Map Service)</h5>
-    <p>Menyediakan peta dalam bentuk gambar raster.</p>
-
-    <h5>4.2. WFS (Web Feature Service)</h5>
-    <p>Menyediakan data spasial vektor yang dapat dianalisis atau diubah oleh client.</p>
-
-    <h5>4.3. WCS (Web Coverage Service)</h5>
-    <p>Menyediakan data raster seperti citra satelit.</p>
+        <h4>4. Jenis Layanan WebGIS</h4>
+        <ul>
+          <li><strong>WMS:</strong> Web Map Service (gambar peta)</li>
+          <li><strong>WFS:</strong> Web Feature Service (data vektor interaktif)</li>
+          <li><strong>WCS:</strong> Web Coverage Service (data raster)</li>
+        </ul>
       </div>
     </div>
 
@@ -435,9 +354,9 @@
       <button class="close-btn" onclick="tutupModal('webgisContainer')">Tutup</button>
       <iframe src="WEBGIS.html" title="Halaman WEBGIS"></iframe>
     </div>
+  </div>
 
-  </div> <!-- akhir .hero -->
-
+  <!-- Script interaksi tombol -->
   <script>
     const btnInformasi = document.getElementById('btnInformasi');
     const btnPeta = document.getElementById('btnPeta');
@@ -479,6 +398,5 @@
       mainContainer.style.display = 'flex';
     }
   </script>
-
 </body>
 </html>
