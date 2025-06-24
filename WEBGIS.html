@@ -30,12 +30,12 @@
     flex-direction: column;
     gap: 10px;
     align-items: flex-end;
-    max-width: 90vw;
+    max-width: 90vw; /* Menggunakan max-width agar responsif */
   }
 
   .search-container {
     position: relative;
-    width: 100%;
+    width: 100%; /* Menggunakan 100% agar responsif dalam search-controls */
     max-width: 260px;
   }
 
@@ -43,7 +43,7 @@
     padding: 8px 12px 8px 36px;
     border-radius: 20px;
     border: none;
-    width: 100%;
+    width: 100%; /* Menggunakan 100% agar responsif dalam search-container */
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     font-size: 14px;
   }
@@ -58,7 +58,7 @@
 
   .button-group {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Memungkinkan tombol untuk wrap ke baris baru */
     gap: 8px;
     justify-content: flex-end;
   }
@@ -88,14 +88,14 @@
     padding: 10px;
     max-height: 200px;
     overflow-y: auto;
-    width: 100%;
+    width: 100%; /* Menggunakan 100% agar responsif dalam search-controls */
     max-width: 260px;
     font-size: 14px;
   }
 
   .popup-content {
     text-align: center;
-    max-width: 90vw;
+    max-width: 90vw; /* Batasi lebar popup agar tidak terlalu besar di layar kecil */
   }
 
   .popup-content h3 {
@@ -105,8 +105,8 @@
   }
 
   .popup-content img {
-    width: 100%;
-    max-width: 250px;
+    width: 100%; /* Gambar akan mengisi lebar popup */
+    max-width: 250px; /* Batasi ukuran maksimum gambar */
     height: auto;
     border-radius: 8px;
     margin-top: 8px;
@@ -114,18 +114,17 @@
   }
 
   .popup-table {
-  width: 100%;
-  margin-top: 6px;
-  border-collapse: collapse;
-  font-size: 12px;
-  table-layout: fixed;
-  word-wrap: break-word;
-}
-.popup-table th, .popup-table td {
-  border: 1px solid #ccc;
-  padding: 4px 6px;
-}
-
+    width: 100%;
+    margin-top: 6px;
+    border-collapse: collapse;
+    font-size: 12px;
+    table-layout: fixed; /* Memastikan kolom tabel tidak melebihi lebar */
+    word-wrap: break-word; /* Memastikan teks panjang dipecah */
+  }
+  .popup-table th, .popup-table td {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+  }
 
   .popup-table th, .popup-table td {
     border: 1px solid #ddd;
@@ -138,19 +137,28 @@
     background-color: #f2f2f2;
   }
 
+  /* Media Queries untuk Responsivitas */
   @media (max-width: 600px) {
     .search-controls {
-      right: 5%;
-      left: 5%;
-      align-items: stretch;
+      right: 5%; /* Sesuaikan posisi dari kanan */
+      left: 5%;  /* Sesuaikan posisi dari kiri, membuat lebar penuh */
+      align-items: stretch; /* Meregangkan item agar mengisi lebar */
     }
 
     .button-group {
-      justify-content: center;
+      justify-content: center; /* Pusatkan tombol di layar kecil */
     }
 
     .search-container input {
-      font-size: 13px;
+      font-size: 13px; /* Ukuran font lebih kecil untuk input pencarian */
+    }
+
+    /* Sesuaikan ukuran popup agar lebih kecil di layar HP */
+    .popup-content {
+      max-width: 250px; /* Batasi lebar popup di layar kecil */
+    }
+    .popup-content img {
+      max-width: 180px; /* Batasi lebar gambar di popup */
     }
   }
 </style>
@@ -166,7 +174,7 @@
   </div>
 
   <!-- Tambahan: hasil pencarian -->
-  <div id="hasilPencarian" style="background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); padding: 10px; max-height: 200px; overflow-y: auto; width: 260px; font-size: 14px;"></div>
+  <div id="hasilPencarian" style="background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); padding: 10px; max-height: 200px; overflow-y: auto; width: 100%; max-width: 260px; font-size: 14px;"></div>
 
   <div class="button-group">
     <button class="filter-button btn-semua" onclick="tampilkanSemua()"><i class="fas fa-layer-group"></i> Semua</button>
@@ -177,10 +185,6 @@
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<!-- Salinan lengkap dari WEBGIS.html dengan modifikasi sesuai permintaan -->
-<!-- BAGIAN YANG DITAMBAHKAN ada tanda // 🔧 TAMBAHAN -->
-
-...
 <script>
   const map = L.map('map').setView([-9.442, 124.478], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -217,8 +221,7 @@
     "Nasi Padang", "Rendang", "Ayam Bakar", "Sayur Lodeh", "Perkedel", "Ikan Bakar", "Sambal Terasi", "Urap", "Telur Balado", "Lalapan"
   ];
 
-
-    function generateRandomMenuByCategory(category) {
+  function generateRandomMenuByCategory(category) {
     let sourceMenu = [];
     if(category === "Cafe") sourceMenu = menuCafe;
     else if(category === "Warung") sourceMenu = menuWarung;
@@ -240,40 +243,40 @@
 
   let markers = [];
   let markerRefs = [];
+  let lastClickedMarker = null; // Variabel untuk menyimpan marker terakhir yang diklik
 
-const popupWidth = 200;
-const popupImageWidth = 180;
+  // Variabel untuk mengontrol ukuran popup secara dinamis
+  const popupWidth = 200;
+  const popupImageWidth = 180;
 
-function buatPopupContent(data) {
-  const jamKerja = data.jamKerja;
+  function buatPopupContent(data) {
+    const jamKerja = data.jamKerja;
 
-  const menuHTML = `
-    <table class="popup-table">
-      <thead><tr><th>Menu</th></tr></thead>
-      <tbody><tr><td>${data.menu.join(', ')}</td></tr></tbody>
-    </table>
-  `;
+    const menuHTML = `
+      <table class="popup-table">
+        <thead><tr><th>Menu</th></tr></thead>
+        <tbody><tr><td>${data.menu.join(', ')}</td></tr></tbody>
+      </table>
+    `;
 
-  const jamKerjaHTML = `
-    <table class="popup-table" style="margin-top:6px;">
-      <thead><tr><th>Jam Buka</th></tr></thead>
-      <tbody><tr><td>${jamKerja}</td></tr></tbody>
-    </table>
-  `;
+    const jamKerjaHTML = `
+      <table class="popup-table" style="margin-top:6px;">
+        <thead><tr><th>Jam Buka</th></tr></thead>
+        <tbody><tr><td>${jamKerja}</td></tr></tbody>
+      </table>
+    `;
 
-  return `
-    <div class="popup-content" style="max-width: ${popupWidth}px;">
-      <h3 style="font-size: 16px;">${data.name}</h3>
-      <img src="${data.image}" alt="${data.name}" 
-        style="width: ${popupImageWidth}px; height: 120px; object-fit: cover; border-radius: 6px; margin-top: 6px;" />
-      <p style="margin: 6px 0; font-size: 13px; color: #555;"><strong>Alamat:</strong><br>${data.alamat}</p>
-      ${menuHTML}
-      ${jamKerjaHTML}
-    </div>
-  `;
-}
-
-
+    return `
+      <div class="popup-content" style="max-width: ${popupWidth}px;">
+        <h3 style="font-size: 16px;">${data.name}</h3>
+        <img src="${data.image}" alt="${data.name}"
+          style="width: ${popupImageWidth}px; height: 120px; object-fit: cover; border-radius: 6px; margin-top: 6px;" />
+        <p style="margin: 6px 0; font-size: 13px; color: #555;"><strong>Alamat:</strong><br>${data.alamat}</p>
+        ${menuHTML}
+        ${jamKerjaHTML}
+      </div>
+    `;
+  }
 
   function tampilkanMarkers(filterIcon = null) {
     markers.forEach(m => map.removeLayer(m));
@@ -291,7 +294,7 @@ function buatPopupContent(data) {
       markers.push(marker);
       markerRefs.push({ marker: marker, data: data });
 
-      // 🔧 TAMBAHAN: animasi zoom + fokus ke marker saat klik
+      // Animasi zoom + fokus ke marker saat klik
       marker.on('click', () => {
         map.flyTo(data.coords, 17, {
           duration: 0.8
@@ -307,10 +310,12 @@ function buatPopupContent(data) {
     const hasilDiv = document.getElementById('hasilPencarian');
     hasilDiv.innerHTML = '';
 
+    // Hapus semua marker yang ada di peta sebelum menampilkan hasil pencarian
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
     if (keyword === '') {
+      // Jika keyword kosong, tampilkan semua marker kembali
       markerRefs.forEach(ref => {
         ref.marker.addTo(map);
         markers.push(ref.marker);
@@ -328,28 +333,31 @@ function buatPopupContent(data) {
         itemHTML.innerHTML = `<strong>${ref.data.name}</strong><br><small>${ref.data.coords[0].toFixed(6)}, ${ref.data.coords[1].toFixed(6)}</small>`;
 
         itemHTML.onclick = () => {
-          // 🔧 TAMBAHAN: reset pencarian & marker
+          // Reset pencarian & marker: hapus semua marker yang ada di peta
           map.eachLayer(layer => {
             if (layer instanceof L.Marker) map.removeLayer(layer);
           });
 
+          // Tambahkan hanya marker yang dipilih
           ref.marker.addTo(map);
           map.flyTo(ref.data.coords, 17, { duration: 1 });
           ref.marker.openPopup();
           lastClickedMarker = ref.marker;
 
+          // Kosongkan input pencarian dan hasil pencarian
           document.getElementById('searchInput').value = '';
           document.getElementById('hasilPencarian').innerHTML = '';
         };
 
         hasilDiv.appendChild(itemHTML);
+        // Tambahkan marker yang cocok ke peta agar terlihat saat hasil pencarian muncul
         ref.marker.addTo(map);
         markers.push(ref.marker);
       }
     });
   }
 
- function tampilkanSemua() {
+  function tampilkanSemua() {
     document.getElementById('searchInput').value = '';
     document.getElementById('hasilPencarian').innerHTML = '';
     tampilkanMarkers(null);
@@ -374,11 +382,11 @@ function buatPopupContent(data) {
   }
 
   // Inisialisasi pertama
-const markerData = [
+  const markerData = [
     { name: "Cafe Lawang", coords: [-9.440845, 124.480273], icon: iconCafe, image: "https://lh3.googleusercontent.com/p/AF1QipPavAMBMvX1Og86_BSsfTvBQ4GJr9fDMxR5Yog9=w427-h240-k-no", category: "Cafe",  alamat: "Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Sisterhood Coffee & Eatery", coords: [-9.448190, 124.478482], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nr0ve51kWde22dvWMqTTXwa6-6-UJVjEuZcJR6Og9LOksCTh151Co-M7-ENkPkWzDYt0RrxrhiXAhqB-Tn5C1DMIs3g6m1C9b5QLMb04cHbndFqAxTHfAWZ5zYwpOq3rJRCLe9ndg=w408-h408-k-no", category: "Cafe", alamat: "Jl. Kartini No.61, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
     { name: "Kafe Boom Steak", coords: [-9.458865, 124.480038], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4np_qDZ4r9pnMNfs0zZzI1U7GyPwMg8kfRjyID0IM-syDSyZnkIZ9DVVL_bn2wUzHUEQKDZnSlcFKNRSxiKHiVpDQvDSNel-QFo-OU-xeG5QqS_TyfyiehnDuFrKfTSJljpPsJw9SQ=w408-h725-k-no", category: "Cafe", alamat: "Jl. L. Lake, Benpasi, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
-    { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no1gn5Or7JvtpnGMrLxoQUtmz-l3eY4fDoDetqaUganjZS66dNxAwShFcQEsTMYQ3HkMSYOJ7JuJyyJohSrEcjq7Ce15oIWKM5AiHDdQyu7BIQkmRYiikNeGyW7haNpy7swA9M=w408-h725-k-no", category: "Cafe", alamat: "Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "PLATINUM cafe & billiard", coords: [-9.473739, 124.482615], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no1gn5Or7JvtpnGMrLxoU7GyPwMg8kfRjyID0IM-syDSyZnkIZ9DVVL_bn2wUzHUEQKDZnSlcFKNRSxiKHiVpDQvDSNel-QFo-OU-xeG5QqS_TyfyiehnDuFrKfTSJljpPsJw9SQ=w408-h725-k-no", category: "Cafe", alamat: "Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RKC Caffe and Resto", coords: [-9.472944, 124.482462], icon: iconCafe, image: "https://img.inews.co.id/media/600/files/networks/2023/07/29/b39e7_resto.jpeg", category: "Cafe", alamat: "GFGJ+RX7, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Xpresso Cafe Kefa", coords: [-9.446748548624845, 124.47891115538647], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrv5JXIbkk1CN48S9REPgpFvOT0UdGU8Bx30jC7rrCyfdJS7Kz_-Vqg5dldZOTSKlCruVvtx6AZka626kIpJW2oNtH-qdaO0137wTm1pMhSTUl85_W9X6YDvSZOTWwLLo1SrfBx=w426-h240-k-no", category: "Cafe", alamat: "HF3H+7GX, Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "CAFE NUSANTARA", coords: [-9.464434590085101, 124.48080166002197], icon: iconCafe, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npfTCLPoxE-xeSqc7KLWwUjSlu8EoxVK3I-9UzngaN3U47LNuNJLl5c1adhmqCjumA71s2tljSQHXczLTdtzHFq9kLlXadSJYvH851st_JNoC0o-eU1zB76snzs5sfx2bcFUyCxNA=w408-h306-k-no", category: "Cafe", alamat: "Jl. Eltari No.km 3, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
@@ -401,18 +409,10 @@ const markerData = [
     { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=ouyVvMpRi0MRHRMBli9OiA&cb_client=maps_sv.tactile.gps&w=224&h=298&yaw=67.01211&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "GF7R+25C, Maubeli, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_ZXTfKOXCbSVBMAl1TymD3efdJbzQnGMKV6wf8uUJg_jgC_W37peRZPPsIao6GH84jxXg8_I0uDwI_Gt3PC1z8V-8oHDPEXrVBawSnXEzDaya2iaR9oiHNtPyTdlUDFl8oOABGA=w397-h298-k-no", category: "Rumah Makan", alamat: "GFHJ+RMF, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM, image: "https://lh3.googleusercontent.com/p/AF1QipP0Urj3iFhf8juHUGK_TYUz6ue7025JDmccwcOy=w408-h306-k-no", category: "Rumah Makan", alamat: "Jl. Sisingamangaraja, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
-];
+  ];
 
-tampilkanSemua();
+  tampilkanSemua();
 </script>
 
-
-</script>
-</script>
 </body>
 </html>
-
-
-
-
-
