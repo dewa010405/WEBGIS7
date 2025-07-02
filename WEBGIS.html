@@ -241,9 +241,8 @@
     return `${buka}:00 - ${tutup}:00 WIB`;
   }
 
-  let markers = [];
-  let markerRefs = [];
-  let lastClickedMarker = null; // Variabel untuk menyimpan marker terakhir yang diklik
+  let markers = []; // Ini akan menyimpan semua marker yang ada di peta
+  let markerRefs = []; // Ini akan menyimpan referensi marker dan datanya
 
   // Variabel untuk mengontrol ukuran popup secara dinamis
   const popupWidth = 200;
@@ -279,9 +278,9 @@
   }
 
   function tampilkanMarkers(filterIcon = null) {
+    // Hapus semua marker dari peta terlebih dahulu
     markers.forEach(m => map.removeLayer(m));
-    markers = [];
-    markerRefs = [];
+    markers = []; // Kosongkan array markers
 
     markerData.forEach(data => {
       if (filterIcon && data.icon !== filterIcon) return;
@@ -291,8 +290,8 @@
 
       const marker = L.marker(data.coords, { icon: data.icon }).addTo(map);
       marker.bindPopup(buatPopupContent(data));
-      markers.push(marker);
-      markerRefs.push({ marker: marker, data: data });
+      markers.push(marker); // Tambahkan marker ke array markers
+      markerRefs.push({ marker: marker, data: data }); // Simpan referensi marker dan datanya
 
       // Animasi zoom + fokus ke marker saat klik
       marker.on('click', () => {
@@ -300,7 +299,6 @@
           duration: 0.8
         });
         marker.openPopup();
-        lastClickedMarker = marker;
       });
     });
   }
@@ -310,22 +308,22 @@
     const hasilDiv = document.getElementById('hasilPencarian');
     hasilDiv.innerHTML = '';
 
-    // Hapus semua marker yang ada di peta sebelum menampilkan hasil pencarian
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
+    // Sembunyikan semua marker terlebih dahulu
+    markers.forEach(m => m.remove());
 
     if (keyword === '') {
       // Jika keyword kosong, tampilkan semua marker kembali
-      markerRefs.forEach(ref => {
-        ref.marker.addTo(map);
-        markers.push(ref.marker);
-      });
+      markers.forEach(m => m.addTo(map));
       return;
     }
 
+    let foundMarkers = [];
     markerRefs.forEach(ref => {
       const nama = ref.data.name.toLowerCase();
       if (nama.includes(keyword)) {
+        foundMarkers.push(ref.marker); // Tambahkan marker yang cocok ke daftar
+        ref.marker.addTo(map); // Tampilkan marker yang cocok di peta
+
         const itemHTML = document.createElement('div');
         itemHTML.style.cursor = 'pointer';
         itemHTML.style.padding = '6px 4px';
@@ -333,34 +331,31 @@
         itemHTML.innerHTML = `<strong>${ref.data.name}</strong><br><small>${ref.data.coords[0].toFixed(6)}, ${ref.data.coords[1].toFixed(6)}</small>`;
 
         itemHTML.onclick = () => {
-          // Reset pencarian & marker: hapus semua marker yang ada di peta
-          map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer);
-          });
-
-          // Tambahkan hanya marker yang dipilih
-          ref.marker.addTo(map);
+          // Fokus ke marker yang dipilih
           map.flyTo(ref.data.coords, 17, { duration: 1 });
           ref.marker.openPopup();
-          lastClickedMarker = ref.marker;
 
           // Kosongkan input pencarian dan hasil pencarian
           document.getElementById('searchInput').value = '';
           document.getElementById('hasilPencarian').innerHTML = '';
-        };
 
+          // Setelah memilih, tampilkan kembali semua marker
+          markers.forEach(m => m.addTo(map));
+        };
         hasilDiv.appendChild(itemHTML);
-        // Tambahkan marker yang cocok ke peta agar terlihat saat hasil pencarian muncul
-        ref.marker.addTo(map);
-        markers.push(ref.marker);
       }
     });
+
+    // Jika tidak ada hasil pencarian, tampilkan semua marker kembali
+    if (foundMarkers.length === 0 && keyword !== '') {
+        markers.forEach(m => m.addTo(map));
+    }
   }
 
   function tampilkanSemua() {
     document.getElementById('searchInput').value = '';
     document.getElementById('hasilPencarian').innerHTML = '';
-    tampilkanMarkers(null);
+    tampilkanMarkers(null); // Tampilkan semua marker tanpa filter
   }
 
   function tampilkanCafe() {
@@ -407,10 +402,11 @@
     { name: "RM Padang 2", coords: [-9.454846, 124.477754], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npKzAYOwyM0Iaat3V5YacSNqe-UXnUHz3jX7Qx9b4d08Cx2BvEEnw5qIQlf9QEjsQLv3s0qX8w6qfrnIzha3ce8Y684axQNICAL8OgLWGXAuuJhkS-acKTHGPxODdi9ZegoZSQa=w408-h306-k-no", category: "Rumah Makan", alamat: "GFWH+342, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "RM Padang \"Sumber Baru\"", coords: [-9.490427, 124.491305], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=Fk3lkXHiA5-SLuwRkwKbKQ&cb_client=search.gws-prod.gps&w=408&h=240&yaw=93.28632&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "Samping Martabak Terang Bulan KM1, Jl. Kartini, Kefamenanu Tengah, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim. 85612" },
     { name: "RM Ayam Kalasan", coords: [-9.487394, 124.490395], icon: iconRM, image: "https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=ouyVvMpRi0MRHRMBli9OiA&cb_client=maps_sv.tactile.gps&w=224&h=298&yaw=67.01211&pitch=0&thumbfov=100", category: "Rumah Makan", alamat: "GF7R+25C, Maubeli, Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
-    { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_ZXTfKOXCbSVBMAl1TymD3efdJbzQnGMKV6wf8uUJg_jgC_W37peRZPPsIao6GH84jxXg8_I0uDwI_Gt3PC1z8V-8oHDPEXrVBawSnXEzDaya2iaR9oiHNtPyTdlUDFl8oOABGA=w397-h298-k-no", category: "Rumah Makan", alamat: "GFHJ+RMF, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
+    { name: "RM. Restu Mulia", coords: [-9.470365443485148, 124.48169164919577], icon: iconRM, image: "https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_ZXTfKOXCbSVBMAl1TymD3efJbzQnGMKV6wf8uUJg_jgC_W37peRZPPsIao6GH84jxXg8_I0uDwI_Gt3PC1z8V-8oHDPEXrVBawSnXEzDaya2iaR9oiHNtPyTdlUDFl8oOABGA=w397-h298-k-no", category: "Rumah Makan", alamat: "GFHJ+RMF, Jl. Eltari, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
     { name: "Restaurant Kota Sari", coords: [-9.471786, 124.480733], icon: iconRM, image: "https://lh3.googleusercontent.com/p/AF1QipP0Urj3iFhf8juHUGK_TYUz6ue7025JDmccwcOy=w408-h306-k-no", category: "Rumah Makan", alamat: "Jl. Sisingamangaraja, Kefamenanu Sel., Kec. Kota Kefamenanu, Kabupaten Timor Tengah Utara, Nusa Tenggara Tim." },
   ];
 
+  // Panggil tampilkanSemua() setelah markerData didefinisikan
   tampilkanSemua();
 </script>
 
